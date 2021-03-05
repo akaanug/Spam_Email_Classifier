@@ -138,34 +138,29 @@ class NaiveBayesTextClassifier:
         # Now find conditional probabilities for each word
         for i in range(vocab_len):
 
-            #  Find P(word | spam)
-            if MLE:
+            #  Find P(word | spam) and P(word | not spam)
+            if MLE:  # MLE
                 p_spam = ((spam_word_counts[i]) / (spam_word_sum))
-            else:
+                p_ns = ((ns_word_counts[i]) / (ns_word_sum))
+            else:  # MAP
                 p_spam = ((spam_word_counts[i] + 1) / (spam_word_sum + vocab_len))
+                p_ns = ((ns_word_counts[i] + 1) / (ns_word_sum + vocab_len))
 
-            if bernoulli:
+            if bernoulli:  # Bernoulli Model
                 spam_ftr_probs.append(p_spam)
-            else:
+                ns_ftr_probs.append(p_ns)
+            else:  # Multinomial Model
                 if p_spam == 0:
                     spam_ftr_probs.append(float('-inf'))  # Avoid base exception
                 else:
                     spam_ftr_probs.append(math.log(p_spam))
 
-            #  Finding P(word | not spam)
-            if MLE:
-                p_ns = ((ns_word_counts[i]) / (ns_word_sum))
-            else:
-                p_ns = ((ns_word_counts[i] + 1) / (ns_word_sum + vocab_len))
-
-            if bernoulli:
-                ns_ftr_probs.append(p_ns)
-            else:
                 if p_ns == 0:
                     ns_ftr_probs.append(float('-inf'))  # Avoid base exception
                 else:
                     ns_ftr_probs.append(math.log(p_ns))
 
+        #  Convert to numpy arrays
         ns_ftr_probs = np.asarray(ns_ftr_probs)
         spam_ftr_probs = np.asarray(spam_ftr_probs)
 
