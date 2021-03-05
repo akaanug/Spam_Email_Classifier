@@ -140,8 +140,8 @@ class NaiveBayesTextClassifier:
 
             #  Find P(word | spam) and P(word | not spam)
             if MLE:  # MLE
-                p_spam = ((spam_word_counts[i]) / (spam_word_sum))
-                p_ns = ((ns_word_counts[i]) / (ns_word_sum))
+                p_spam = spam_word_counts[i] / spam_word_sum
+                p_ns = ns_word_counts[i] / ns_word_sum
             else:  # MAP
                 p_spam = ((spam_word_counts[i] + 1) / (spam_word_sum + vocab_len))
                 p_ns = ((ns_word_counts[i] + 1) / (ns_word_sum + vocab_len))
